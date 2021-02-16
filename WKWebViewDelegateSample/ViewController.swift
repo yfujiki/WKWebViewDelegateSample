@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let url = URL(string: "https://resourceloadfailure.web.app/index2.html")!
+        let url = URL(string: "https://resourceloadfailure.web.app/index.html")!
         let request = URLRequest(url: url)
         webView.load(request)
     }
@@ -64,7 +64,7 @@ extension ViewController : WKNavigationDelegate {
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        NSLog("%% Did finish navigation for \(String(describing: webView.url))")
+        NSLog("%% Process did terminate navigation for \(String(describing: webView.url))")
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
@@ -83,20 +83,20 @@ extension ViewController : WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let iFrame = navigationAction.targetFrame == nil
+        let newWindow = navigationAction.targetFrame == nil
         NSLog("%% Decide Policy For action")
-        NSLog("%% \tMain Frame?: \(!iFrame)")
+        NSLog("%% \tNew Window?: \(newWindow)")
         decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
         let contentMode = preferences.preferredContentMode
         let allowJavaScript = preferences.allowsContentJavaScript
-        let iFrame = navigationAction.targetFrame == nil
+        let newWindow = navigationAction.targetFrame == nil
         NSLog("%% Decide Policy For action and preferences")
         NSLog("%% \tContentMode: \(contentMode)")
         NSLog("%% \tJavaScript: \(allowJavaScript)")
-        NSLog("%% \tMain Frame?: \(!iFrame)")
+        NSLog("%% \tNew Window?: \(newWindow)")
         decisionHandler(.allow, preferences)
     }
 }
